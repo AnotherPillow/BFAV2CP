@@ -1,4 +1,4 @@
-import sys
+import sys, os
 
 from src.Converter import *
 from src.reqs import install as installDependencies
@@ -10,6 +10,9 @@ logger.time_format = '%H:%M:%S'
 
 installDependencies(logger)
 
+if not os.path.exists('output'):
+    os.mkdir('output')
+
 conversion = BFAV2CP(logger)
 
-print(conversion)
+# print(conversion)

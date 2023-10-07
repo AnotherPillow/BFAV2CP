@@ -1,6 +1,4 @@
-import json5
-
-
+import json5, json, shutil, os
 
 from src.Logger.python import Logger
 
@@ -35,7 +33,8 @@ class BFAV2CP:
             buildings: list = animal['Buildings']
 
             self.assets.append({
-                "animal": animal,
+                "animal": animal['Category'],
+                "trueAnimal": animal['Category'],
                 "path": shop['Icon'],
                 "id": "shopIcon"
 
@@ -44,19 +43,23 @@ class BFAV2CP:
             
             for type in animal['Types']:
                 self.assets.append({
-                    "animal": type,
+                    "animal": type['Type'],
+                    "trueAnimal": animal['Category'],
                     "path": type['Sprites']['Adult'],
                     "id": "adultSprite",
                 })
                 self.assets.append({
-                    "animal": type,
+                    "animal": type['Type'],
+                    "trueAnimal": animal['Category'],
                     "path": type['Sprites']['Baby'],
                     "id": "babySprite",
                 })
                 if 'ReadyForHarvest' in type['Sprites']:
                     self.assets.append({
-                        "animal": type,
-                        "path": type['Sprites']['ReadyForHarvest']
+                        "animal": type['Type'],
+                        "trueAnimal": animal['Category'],
+                        "path": type['Sprites']['ReadyForHarvest'],
+                        "id": "harvestSprite"
                     })
                 parsed = self.splitAnimalData(type['Data'])
 
@@ -103,16 +106,89 @@ class BFAV2CP:
                         'HarvestTool': parsed['harvestTool'],
                         'Sound': parsed['sound'],
                         'BabySound': parsed['sound'],
-
-
-
+                        'Texture': f'Animals/{type["Type"]}',
+                        'HarvestedTexture': f'Animals/{type["Type"]} Harvested',
+                        'BabyTexture': f'Animals/{type["Type"]} Baby',
+                        'SpriteWidth': parsed['frontBackSpriteSize'][0],
+                        'SpriteHeight': parsed['frontBackSpriteSize'][1],
+                        # 'Skins': 'TODO: make skins use types, not seperate animals',
+                        'ShowInSummitCredits': True, # this is on because yes.
                     }
                 }
 
-                self.logger.success(newAnimal)
+                self.outputContent['Changes'].append({
+                    'LogName': f'Load data for {animal["Category"]} ({type["Type"]})',
+                    'Action': 'EditData',
+                    'Target': 'Data/FarmAnimals',
+                    'Entries': {
+                        newAnimal['key']: newAnimal['value']
+                    }
+                })
+
+                
+
+                # self.logger.info(self.outputContent)
+
+                # self.logger.success(newAnimal)
+
+        for asset in self.assets:
+            self.logger.info(asset)
+
+            id = asset['id']
+
+            if id == 'adultSprite':
+                self.outputContent['Changes'].append({
+                    'LogName': f'Load {id} for {asset["animal"]}',
+                    'Action': 'Load',
+                    'Target': f'Animals/{asset["animal"]}',
+                    'FromFile': asset['path']
+                })
+            elif id == 'babySprite':
+                self.outputContent['Changes'].append({
+                    'LogName': f'Load {id} for {asset["animal"]}',
+                    'Action': 'Load',
+                    'Target': f'Animals/{asset["animal"]} Baby',
+                    'FromFile': asset['path']
+                })
+            elif id == 'harvestsprite':
+                self.outputContent['Changes'].append({
+                    'LogName': f'Load {id} for {asset["animal"]}',
+                    'Action': 'Load',
+                    'Target': f'Animals/{asset["animal"]} Harvested',
+                    'FromFile': asset['path']
+                })
+            elif id == 'shopIcon':
+                self.outputContent['Changes'].append({
+                    'LogName': f'Load {id} for {asset["animal"]}',
+                    'Action': 'Load',
+                    'Target': f'Animals/{asset["trueAnimal"]} Icon',
+                    'FromFile': asset['path']
+                })
+            
+
+
+        with open('output/content.json', 'w', encoding='utf-8') as f:
+            json.dump( self.outputContent, f, indent=4 )
+            f.close()        
+            
+        with open('output/manifest.json', 'w', encoding='utf-8') as f:
+            json.dump( self.outputManifest, f, indent=4 )
+            f.close()
+
+        if os.path.exists('output/assets'):
+            shutil.rmtree('output/assets')
+        
+        shutil.copytree('input/assets', 'output/assets')
+            
+
+            
+
 
     def splitAnimalData(type: str, data: str) -> dict:
         _parts = data.split('/')
+
+        # print(_parts[16])
+        # print(_parts[17])
 
         return {
             'daysToProduce': _parts[0],
@@ -120,13 +196,13 @@ class BFAV2CP:
             'defaultProduceIndex': _parts[2],
             'deluxeProduceIndex': _parts[3],
             'sound': _parts[4],
-            '_frontBackBounding': _parts[5:9],
-            '_sideBounding': _parts[9:12],
+            '_frontBackBounding': _parts[5:10],
+            '_sideBounding': _parts[9:13],
             'harvestType': int(_parts[13]),
             'changeTextureWhenItemReady': _parts[14] == 'true',
             'buildingType': _parts[15],
-            'frontBackSpriteSize': _parts[16:17],
-            'sideSpriteSize': _parts[18:19],
+            'frontBackSpriteSize': _parts[16:18],
+            'sideSpriteSize': _parts[18:20],
             'fullnessDrain': _parts[20],
             'happinessDrain': _parts[21],
             'harvestTool': _parts[22],
@@ -139,7 +215,3 @@ class BFAV2CP:
         }
 
         
-
-
-        
-

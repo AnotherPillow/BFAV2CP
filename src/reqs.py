@@ -13,7 +13,7 @@ def install(logger: Logger):
     for dep in DEPS:
         try:
             __import__(dep)
-            logger.success(f'Package {dep} is already installed.')
+            logger.success(f'Package {dep} is already installed, does not need installing.')
         except ImportError:
             logger.error(f'Failed to import {dep}')
             logger.info(f'Attempting to install now...')
