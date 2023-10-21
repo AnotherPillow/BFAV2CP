@@ -36,8 +36,8 @@ class BFAV2CP:
                 "animal": animal['Category'],
                 "trueAnimal": animal['Category'],
                 "path": shop['Icon'],
+                "target_path": f'Animals/{animal["Category"]} Icon',
                 "id": "shopIcon"
-
             })
 
             
@@ -54,6 +54,14 @@ class BFAV2CP:
                     "path": type['Sprites']['Baby'],
                     "id": "babySprite",
                 })
+                self.assets.append({
+                    "animal": type['Type'],
+                    "trueAnimal": animal['Category'],
+                    "path": shop['Icon'],
+                    "target_path": f'Animals/{type["Type"]} Icon',
+                    "id": "shopIcon"
+                })
+                
                 if 'ReadyForHarvest' in type['Sprites']:
                     self.assets.append({
                         "animal": type['Type'],
@@ -66,16 +74,16 @@ class BFAV2CP:
                 newAnimal = {
                     'key': type['Type'],
                     'value': {
-                        'DisplayName': parsed['displayType'],
+                        'DisplayName': f"{type['Type']} {parsed['displayType']}",
                         'House': parsed['buildingType'],
                         'Gender': 'MaleOrFemale',
                         'PurchasePrice': shop['Price'],
                         'ShopTexture': f'Animals/{type["Type"]} Icon',
                         'ShopSourceRect': {
                             'X': 0,
-                            'Y': '0',
-                            'Wdith': '32',
-                            'Height': '16',
+                            'Y': 0,
+                            'Wdith': 32,
+                            'Height': 16,
                         },
                         'RequiredBuilding': parsed['buildingType'],
                         'ShopDisplayName': shop['Name'],
@@ -158,10 +166,12 @@ class BFAV2CP:
                     'FromFile': asset['path']
                 })
             elif id == 'shopIcon':
+                tpath = asset['target_path']
                 self.outputContent['Changes'].append({
                     'LogName': f'Load {id} for {asset["animal"]}',
                     'Action': 'Load',
-                    'Target': f'Animals/{asset["trueAnimal"]} Icon',
+                    # 'Target': f'Animals/{asset["trueAnimal"]} Icon',
+                    'Target': tpath,
                     'FromFile': asset['path']
                 })
             
