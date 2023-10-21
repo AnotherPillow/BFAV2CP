@@ -79,7 +79,7 @@ class BFAV2CP:
                 newAnimal = {
                     'key': type['Type'],
                     'value': {
-                        'DisplayName': f"{type['Type']} {parsed['displayType']}",
+                        'DisplayName': f"{parsed['displayType']}",
                         'House': parsed['buildingType'],
                         'Gender': 'MaleOrFemale',
                         'PurchasePrice': shop['Price'],
@@ -91,7 +91,8 @@ class BFAV2CP:
                             'Height': 16,
                         },
                         'RequiredBuilding': parsed['buildingType'],
-                        'ShopDisplayName': shop['Name'],
+                        # 'ShopDisplayName': shop['Name'],
+                        'ShopDisplayName': f"{parsed['displayType']} {shop['Name']}",
                         'ShopDescription': shop['Description'],
                         'DaysToMature': parsed['daysToMature'],
                         'ProduceItemIds': [
