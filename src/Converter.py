@@ -122,7 +122,7 @@ class BFAV2CP:
                         'BabySound': parsed['sound'],
                         'Texture': f'Animals/{self.uid}-{type["Type"]}',
                         'HarvestedTexture': f'Animals/{self.uid}-{type["Type"]} Harvested',
-                        'BabyTexture': f'Animals/{self.uid}-{{type["Type"]} Baby',
+                        'BabyTexture': f'Animals/{self.uid}-{type["Type"]} Baby',
                         'SpriteWidth': parsed['frontBackSpriteSize'][0],
                         'SpriteHeight': parsed['frontBackSpriteSize'][1],
                         # 'Skins': 'TODO: make skins use types, not seperate animals',
