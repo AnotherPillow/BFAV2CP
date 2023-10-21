@@ -11,6 +11,7 @@ class BFAV2CP:
         "Changes": []
     }
     outputManifest: dict
+    uid: str
 
     assets: list = []
 
@@ -24,6 +25,10 @@ class BFAV2CP:
         self.outputManifest['ContentPackFor']['UniqueID'] = 'Pathoschild.ContentPatcher'
         self.outputManifest['Author'] += ' ~ BFAV2CP'
 
+        self.uid = self.outputManifest['UniqueID']
+
+    
+
         self.logger = _logger
 
         for animal in self.inputContent['Categories']:
@@ -36,7 +41,7 @@ class BFAV2CP:
                 "animal": animal['Category'],
                 "trueAnimal": animal['Category'],
                 "path": shop['Icon'],
-                "target_path": f'Animals/{animal["Category"]} Icon',
+                "target_path": f'Animals/{self.uid}-{animal["Category"]} Icon',
                 "id": "shopIcon"
             })
 
@@ -58,7 +63,7 @@ class BFAV2CP:
                     "animal": type['Type'],
                     "trueAnimal": animal['Category'],
                     "path": shop['Icon'],
-                    "target_path": f'Animals/{type["Type"]} Icon',
+                    "target_path": f'Animals/{self.uid}-{type["Type"]} Icon',
                     "id": "shopIcon"
                 })
                 
@@ -78,11 +83,11 @@ class BFAV2CP:
                         'House': parsed['buildingType'],
                         'Gender': 'MaleOrFemale',
                         'PurchasePrice': shop['Price'],
-                        'ShopTexture': f'Animals/{type["Type"]} Icon',
+                        'ShopTexture': f'Animals/{self.uid}-{type["Type"]} Icon',
                         'ShopSourceRect': {
                             'X': 0,
                             'Y': 0,
-                            'Wdith': 32,
+                            'Width': 32,
                             'Height': 16,
                         },
                         'RequiredBuilding': parsed['buildingType'],
@@ -114,8 +119,8 @@ class BFAV2CP:
                         'HarvestTool': parsed['harvestTool'],
                         'Sound': parsed['sound'],
                         'BabySound': parsed['sound'],
-                        'Texture': f'Animals/{type["Type"]}',
-                        'HarvestedTexture': f'Animals/{type["Type"]} Harvested',
+                        'Texture': f'Animals/{self.uid}-{type["Type"]}',
+                        'HarvestedTexture': f'Animals/{self.uid}-{type["Type"]} Harvested',
                         'BabyTexture': f'Animals/{type["Type"]} Baby',
                         'SpriteWidth': parsed['frontBackSpriteSize'][0],
                         'SpriteHeight': parsed['frontBackSpriteSize'][1],
@@ -148,21 +153,21 @@ class BFAV2CP:
                 self.outputContent['Changes'].append({
                     'LogName': f'Load {id} for {asset["animal"]}',
                     'Action': 'Load',
-                    'Target': f'Animals/{asset["animal"]}',
+                    'Target': f'Animals/{self.uid}-{asset["animal"]}',
                     'FromFile': asset['path']
                 })
             elif id == 'babySprite':
                 self.outputContent['Changes'].append({
                     'LogName': f'Load {id} for {asset["animal"]}',
                     'Action': 'Load',
-                    'Target': f'Animals/{asset["animal"]} Baby',
+                    'Target': f'Animals/{self.uid}-{asset["animal"]} Baby',
                     'FromFile': asset['path']
                 })
             elif id == 'harvestsprite':
                 self.outputContent['Changes'].append({
                     'LogName': f'Load {id} for {asset["animal"]}',
                     'Action': 'Load',
-                    'Target': f'Animals/{asset["animal"]} Harvested',
+                    'Target': f'Animals/{self.uid}-{asset["animal"]} Harvested',
                     'FromFile': asset['path']
                 })
             elif id == 'shopIcon':
