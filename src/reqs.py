@@ -2,7 +2,8 @@ import pip
 from .Logger.python import Logger
 
 DEPS = [
-    'json5'
+    'json5',
+    'colorama'
 ]
 
 def install_package(pkg: str):
