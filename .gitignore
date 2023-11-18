@@ -1,9 +1,4 @@
 input/
 output/
-<<<<<<< HEAD
-
-.DS_Store
-=======
 .DS_Store
 __pycache__/
->>>>>>> ce829adc8fabc9dc37e6787a8543d62cad221d8f
