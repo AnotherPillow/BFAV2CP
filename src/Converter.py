@@ -122,7 +122,7 @@ class BFAV2CP:
                         'BabySound': parsed['sound'],
                         'Texture': f'Animals/{self.uid}-{type["Type"]}',
                         'HarvestedTexture': f'Animals/{self.uid}-{type["Type"]} Harvested',
-                        'BabyTexture': f'Animals/{self.uid}-{{type["Type"]} Baby',
+                        'BabyTexture': f'Animals/{self.uid}-{type["Type"]} Baby',
                         'SpriteWidth': parsed['frontBackSpriteSize'][0],
                         'SpriteHeight': parsed['frontBackSpriteSize'][1],
                         # 'Skins': 'TODO: make skins use types, not seperate animals',
@@ -138,6 +138,8 @@ class BFAV2CP:
                         newAnimal['key']: newAnimal['value']
                     }
                 })
+
+                self.logger.success(f'Finished {self.outputContent["Changes"][-1]["LogName"]}')
 
                 
 
@@ -180,6 +182,8 @@ class BFAV2CP:
                     'Target': tpath,
                     'FromFile': asset['path']
                 })
+
+            self.logger.success(f'Added {id} asset for {asset["animal"]}')
             
 
 
