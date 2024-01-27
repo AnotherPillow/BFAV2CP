@@ -35,7 +35,6 @@ class BFAV2CP:
             self.logger.success(animal['Category'])
 
             shop = animal['AnimalShop']
-            buildings: list = animal['Buildings']
 
             self.assets.append({
                 "animal": animal['Category'],
