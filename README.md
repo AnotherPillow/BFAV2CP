@@ -9,5 +9,5 @@ A converter to convert BFAV (Better Farm Animal Variety) mods to Content Patcher
     - `git clone https://github.com/anotherpillow/BFAV2CP.git && cd BFAV2CP`
     - `git submodule update --init --recursive`
 3. Place your BFAV mod into the same directory as `main.py` and rename it to `input`, so the `manifest.json` is `<BFAV2CP Directory>/input/manifest.json`
-4. Run `main.py`
+4. Run `main.py` (preferably from a terminal)
 5. Find your converted mod in `output/`
