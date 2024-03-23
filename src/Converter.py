@@ -7,7 +7,7 @@ class BFAV2CP:
     inputManifest: dict
 
     outputContent: dict = {
-        "Format": "1.29.5",
+        "Format": "2.0",
         "Changes": []
     }
     outputManifest: dict
