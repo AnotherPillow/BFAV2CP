@@ -198,6 +198,8 @@ class BFAV2CP:
             shutil.rmtree('output/assets')
         
         shutil.copytree('input/assets', 'output/assets')
+
+        self.logger.success('Conversion complete.')
             
 
             
