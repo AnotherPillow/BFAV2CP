@@ -2,6 +2,9 @@ import json5, json, shutil, os
 
 from src.Logger.python import Logger
 
+def catchMissing(obj: dict, key: str, default):
+    return obj[key] if key in obj else default
+
 class BFAV2CP:
     inputContent: dict
     inputManifest: dict
@@ -34,15 +37,20 @@ class BFAV2CP:
         for animal in self.inputContent['Categories']:
             self.logger.success(animal['Category'])
 
-            shop = animal['AnimalShop']
+            if 'AnimalShop' not in animal:
+                self.logger.error(f'{animal["Category"]} is not purchasable, will not be obtainable without external means.')
 
-            self.assets.append({
-                "animal": animal['Category'],
-                "trueAnimal": animal['Category'],
-                "path": shop['Icon'],
-                "target_path": f'Animals/{self.uid}-{animal["Category"]} Icon',
-                "id": "shopIcon"
-            })
+            # shop = animal['AnimalShop']
+            shop = catchMissing(animal, 'AnimalShop', None)
+
+            if shop:
+                self.assets.append({
+                    "animal": animal['Category'],
+                    "trueAnimal": animal['Category'],
+                    "path": shop['Icon'],
+                    "target_path": f'Animals/{self.uid}-{animal["Category"]} Icon',
+                    "id": "shopIcon"
+                })
 
             
             for type in animal['Types']:
@@ -58,13 +66,14 @@ class BFAV2CP:
                     "path": type['Sprites']['Baby'],
                     "id": "babySprite",
                 })
-                self.assets.append({
-                    "animal": type['Type'],
-                    "trueAnimal": animal['Category'],
-                    "path": shop['Icon'],
-                    "target_path": f'Animals/{self.uid}-{type["Type"]} Icon',
-                    "id": "shopIcon"
-                })
+                if shop:
+                    self.assets.append({
+                        "animal": type['Type'],
+                        "trueAnimal": animal['Category'],
+                        "path": shop['Icon'],
+                        "target_path": f'Animals/{self.uid}-{type["Type"]} Icon',
+                        "id": "shopIcon"
+                    })
                 
                 if 'ReadyForHarvest' in type['Sprites']:
                     self.assets.append({
@@ -81,7 +90,7 @@ class BFAV2CP:
                         'DisplayName': f"{parsed['displayType']}",
                         'House': parsed['buildingType'],
                         'Gender': 'MaleOrFemale',
-                        'PurchasePrice': shop['Price'],
+                        'PurchasePrice': shop['Price'] if shop else None,
                         'ShopTexture': f'Animals/{self.uid}-{type["Type"]} Icon',
                         'ShopSourceRect': {
                             'X': 0,
@@ -92,7 +101,7 @@ class BFAV2CP:
                         'RequiredBuilding': parsed['buildingType'],
                         # 'ShopDisplayName': shop['Name'],
                         'ShopDisplayName': f"{parsed['displayType']}",
-                        'ShopDescription': shop['Description'],
+                        'ShopDescription': shop['Description'] if shop else 'This animal is not purchasable.',
                         'DaysToMature': parsed['daysToMature'],
                         'ProduceItemIds': [
                             {
