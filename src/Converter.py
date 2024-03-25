@@ -3,6 +3,8 @@ import json5, json, shutil, os
 from src.Logger.python import Logger
 
 def catchMissing(obj: dict, key: str, default):
+    if obj is None:
+        return default
     return obj[key] if key in obj else default
 
 class BFAV2CP:
@@ -90,7 +92,7 @@ class BFAV2CP:
                         'DisplayName': f"{parsed['displayType']}",
                         'House': parsed['buildingType'],
                         'Gender': 'MaleOrFemale',
-                        'PurchasePrice': shop['Price'] if shop else None,
+                        'PurchasePrice': catchMissing(shop, 'Price', 1),
                         'ShopTexture': f'Animals/{self.uid}-{type["Type"]} Icon',
                         'ShopSourceRect': {
                             'X': 0,
@@ -101,7 +103,7 @@ class BFAV2CP:
                         'RequiredBuilding': parsed['buildingType'],
                         # 'ShopDisplayName': shop['Name'],
                         'ShopDisplayName': f"{parsed['displayType']}",
-                        'ShopDescription': shop['Description'] if shop else 'This animal is not purchasable.',
+                        'ShopDescription': catchMissing(shop, 'Description', 'This animal is not purchasable.'),
                         'DaysToMature': parsed['daysToMature'],
                         'ProduceItemIds': [
                             {
