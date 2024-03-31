@@ -28,6 +28,10 @@ class BFAV2CP:
         
         self.outputManifest = self.inputManifest
         self.outputManifest['ContentPackFor']['UniqueID'] = 'Pathoschild.ContentPatcher'
+        if 'Dependencies' in self.outputManifest:
+            self.outputManifest["Dependencies"] = \
+                [x for x in self.outputManifest["Dependencies"] if x["UniqueID"] != 'Paritee.BetterFarmAnimalVariety']
+
         self.outputManifest['Author'] += ' ~ BFAV2CP'
 
         self.uid = self.outputManifest['UniqueID']
