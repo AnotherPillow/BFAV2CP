@@ -77,7 +77,7 @@ class BFAV2CP:
                         "animal": type['Type'],
                         "trueAnimal": animal['Category'],
                         "path": shop['Icon'],
-                        "target_path": f'Animals/{self.uid}-{type["Type"]} Icon',
+                        "target_path": f'Animals/{self.uid}-{animal["Category"]}.{type["Type"]} Icon',
                         "id": "shopIcon"
                     })
                 
