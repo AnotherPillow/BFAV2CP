@@ -66,12 +66,14 @@ class BFAV2CP:
                     "path": type['Sprites']['Adult'],
                     "id": "adultSprite",
                 })
-                self.assets.append({
-                    "animal": type['Type'],
-                    "trueAnimal": animal['Category'],
-                    "path": type['Sprites']['Baby'],
-                    "id": "babySprite",
-                })
+                if 'Baby' in type['Sprites']:
+                    self.assets.append({
+                        "animal": type['Type'],
+                        "trueAnimal": animal['Category'],
+                        "path": type['Sprites']['Baby'],
+                        "id": "babySprite",
+                    })
+                
                 if shop:
                     self.assets.append({
                         "animal": type['Type'],
@@ -136,7 +138,7 @@ class BFAV2CP:
                         'BabySound': parsed['sound'],
                         'Texture': f'Animals/{self.uid}-{type["Type"]}',
                         'HarvestedTexture': f'Animals/{self.uid}-{type["Type"]} Harvested',
-                        'BabyTexture': f'Animals/{self.uid}-{type["Type"]} Baby',
+                        'BabyTexture': f'Animals/{self.uid}-{type["Type"]} Baby' if 'Baby' in type['Sprites'] else None,
                         'SpriteWidth': parsed['frontBackSpriteSize'][0],
                         'SpriteHeight': parsed['frontBackSpriteSize'][1],
                         # 'Skins': 'TODO: make skins use types, not seperate animals',
